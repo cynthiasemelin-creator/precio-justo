@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Calculadora gratuita y de código abierto para estimar costos y precios de venta de productos artesanales.">
+  <title>Precio Justo | Calculadora artesanal</title>
+  <link rel="stylesheet" href="styles.css">
+  <script type="module">import { calculatePrice } from "./calculator.mjs"; window.PrecioJusto = { calculatePrice }; import("./app.js");</script>
+</head>
+<body>
+  <header class="site-header"><div class="wrap"><div class="brand">✳ Precio Justo <span>OPEN SOURCE</span></div><p>Calculá el precio de tus creaciones sin perder de vista tus costos.</p></div></header>
+  <main class="wrap">
+    <section class="intro"><h1>¿Cuánto debería cobrar?</h1><p>Sumá materiales, tiempo, gastos y comisiones. Calculamos el precio sugerido según el margen de ganancia que quieras obtener.</p></section>
+    <section class="layout">
+      <form id="calculator" class="panel" novalidate>
+        <h2>Tu producto</h2>
+        <div class="two-col"><label>Nombre del producto<input id="product" type="text" placeholder="Ej.: 4 posavasos personalizados" maxlength="120"></label><label>Moneda<input id="currency" type="text" value="ARS" maxlength="12" aria-describedby="currency-help"><small id="currency-help">ARS, USD, EUR u otra sigla</small></label></div>
+        <h2>Materiales <button type="button" id="add-material" class="button secondary small">+ Agregar</button></h2>
+        <div id="materials" aria-live="polite"></div>
+        <h2>Tiempo y otros costos</h2>
+        <div class="two-col">
+          <label>Horas de trabajo<input id="hours" type="number" min="0" step="0.25" value="1" inputmode="decimal"></label>
+          <label>Valor por hora<input id="hour-rate" type="number" min="0" step="0.01" value="0" inputmode="decimal"></label>
+          <label>Otros costos por unidad<input id="other-costs" type="number" min="0" step="0.01" value="0" inputmode="decimal"><small>Embalaje, envío asumido, electricidad, etc.</small></label>
+          <label>Gastos fijos asignados por unidad<input id="fixed-costs" type="number" min="0" step="0.01" value="0" inputmode="decimal"></label>
+        </div>
+        <h2>Venta y beneficio</h2>
+        <div class="two-col">
+          <label>Comisión sobre la venta (%)<input id="fee" type="number" min="0" max="99" step="0.1" value="0" inputmode="decimal"></label>
+          <label>Margen deseado (%)<input id="margin" type="number" min="0" max="99" step="1" value="30" inputmode="decimal"><small>Ganancia como porcentaje del precio final, no recargo sobre costo.</small></label>
+        </div>
+        <p id="error" class="error" role="alert" aria-live="assertive"></p>
+        <div class="actions"><button type="submit" class="button">Calcular precio</button><button type="button" class="button secondary" id="save">Guardar cálculo</button><button type="button" class="button secondary" id="download">Exportar CSV</button></div>
+      </form>
+      <aside class="panel result" aria-live="polite">
+        <p class="eyebrow">PRECIO SUGERIDO</p><output id="price" class="price">—</output>
+        <p id="explanation" class="muted">Ingresá tus costos y presioná «Calcular precio».</p>
+        <dl><div><dt>Materiales</dt><dd id="material-total">—</dd></div><div><dt>Mano de obra</dt><dd id="labor-total">—</dd></div><div><dt>Otros + fijos</dt><dd id="overheads">—</dd></div><div><dt>Costo total</dt><dd id="base-cost">—</dd></div><div><dt>Comisión estimada</dt><dd id="fee-total">—</dd></div><div><dt>Ganancia estimada</dt><dd id="profit-total">—</dd></div></dl>
+        <div class="note"><strong>Importante:</strong> es una herramienta orientativa. No reemplaza asesoramiento contable ni contempla impuestos que no hayas incluido en los costos.</div>
+        <h3>Cálculos guardados</h3><ul id="saved" class="saved-list"><li class="muted">Todavía no guardaste ninguno.</li></ul>
+      </aside>
+    </section>
+  </main>
+  <footer class="wrap"><p>Gratis, sin registro y sin seguimiento. Los cálculos guardados quedan solamente en este navegador. Proyecto de código abierto con licencia MIT.</p></footer>
+  <template id="material-template"><div class="material-row"><label>Material<input class="material-name" type="text" placeholder="Madera, pintura, hilo..." maxlength="100"></label><label>Cantidad<input class="material-quantity" type="number" min="0" step="0.01" value="1" inputmode="decimal"></label><label>Costo unitario<input class="material-cost" type="number" min="0" step="0.01" value="0" inputmode="decimal"></label><button type="button" class="remove" aria-label="Eliminar material">×</button></div></template>
+</body>
+</html>
